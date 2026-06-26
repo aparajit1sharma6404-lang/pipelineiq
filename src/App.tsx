@@ -64,7 +64,7 @@ export default function App() {
       }} className="sidebar-wrapper">
         <Sidebar
           activePage={page}
-          setPage={(p) => { setPage(p); setSidebarOpen(false); }}
+          setPage={(p: string) => { setPage(p); setSidebarOpen(false); }}
           dark={dark}
           toggleDark={() => setDark(d => !d)}
         />
