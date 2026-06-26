@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { exportPipelineReport } from "../utils/exportPDF";
 import KpiCard from "../components/KpiCard";
 import PipelineTable from "../components/PipelineTable";
 
@@ -56,6 +57,20 @@ export default function Dashboard({ dark }: DashboardProps) {
 
   return (
     <div>
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}>
+        <button
+          onClick={() => exportPipelineReport(pipelines)}
+          style={{
+            background: "linear-gradient(135deg, #3b82f6, #2563eb)",
+            color: "#fff", border: "none", borderRadius: "8px",
+            padding: "10px 20px", cursor: "pointer",
+            fontSize: "13px", fontWeight: 700,
+            boxShadow: "0 0 15px rgba(59,130,246,0.3)",
+          }}
+        >
+          ⬇ Export PDF Report
+        </button>
+      </div>
       <div style={{ display: "flex", gap: "16px", marginBottom: "24px" }}>
         {kpis.map(k => (
           <KpiCard key={k.title} dark={dark} {...k} value={k.value as string | number} />
