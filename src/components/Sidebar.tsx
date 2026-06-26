@@ -9,6 +9,7 @@ const navItems = [
   { label: "Analytics", icon: "〜", page: "analytics" },
   { label: "Alerts", icon: "🔔", page: "alerts" },
   { label: "AI Assistant", icon: "🤖", page: "chatbot" },
+  { label: "Risk Intelligence", icon: "⚠️", page: "risk" },
   { label: "Settings", icon: "⚙", page: "settings" },
 ];
 export default function Sidebar({ activePage, setPage, dark, toggleDark }: SidebarProps) {

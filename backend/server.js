@@ -10,6 +10,7 @@ app.use("/api/pipelines", require("./routes/pipelineRoutes"));
 app.use("/api/simulate", require("./routes/simulateRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/chat", require("./routes/chatRoutes"));
+app.use("/api/risk", require("./routes/riskRoutes"));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {

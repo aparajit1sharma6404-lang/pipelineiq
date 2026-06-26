@@ -6,6 +6,7 @@ import Alerts from "./pages/Alerts";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Chatbot from "./pages/Chatbot";
+import Risk from "./pages/Risk";
 import type { Thresholds } from "./pages/Settings";
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
     analytics: ["Analytics", "Historical flow and pressure trends"],
     alerts: ["Alerts", "Active warnings and critical events"],
     chatbot: ["AI Assistant", "Ask questions about your pipelines"],
+    risk: ["Risk Intelligence", "AI-powered predictive risk scoring"],
     settings: ["Settings", "Account and system preferences"],
   };
 
@@ -37,6 +39,7 @@ export default function App() {
       case "analytics": return <Analytics dark={dark} />;
       case "alerts": return <Alerts dark={dark} />;
       case "chatbot": return <Chatbot dark={dark} />;
+      case "risk": return <Risk dark={dark} />;
       case "settings": return <Settings dark={dark} thresholds={thresholds} setThresholds={setThresholds} />;
       default: return <Dashboard dark={dark} />;
     }
