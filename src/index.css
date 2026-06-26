@@ -5,3 +5,20 @@ button { font-family: inherit; }
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #0f1117; }
 ::-webkit-scrollbar-thumb { background: #2a2f42; border-radius: 3px; }
+.login-left {
+  display: flex;
+}
+
+.login-right {
+  width: 480px;
+}
+
+@media (max-width: 768px) {
+  .login-left {
+    display: none !important;
+  }
+  .login-right {
+    width: 100% !important;
+    padding: 20px !important;
+  }
+}
