@@ -18,8 +18,8 @@ export default function Analytics({ dark }: AnalyticsProps) {
 
   useEffect(() => {
     const run = () => {
-      fetch("http://localhost:5000/api/simulate", { method: "POST" })
-        .then(() => fetch("http://localhost:5000/api/pipelines"))
+      fetch("https://pipelineiq-backendd.onrender.com/api/simulate", { method: "POST" })
+        .then(() => fetch("https://pipelineiq-backendd.onrender.com/api/pipelines"))
         .then(r => r.json())
         .then(setPipelines);
     };

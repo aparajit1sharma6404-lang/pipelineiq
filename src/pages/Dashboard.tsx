@@ -20,7 +20,7 @@ export default function Dashboard({ dark }: DashboardProps) {
 
   useEffect(() => {
     const fetchData = () =>
-      fetch("http://localhost:5000/api/pipelines")
+      fetch("https://pipelineiq-backendd.onrender.com/api/pipelines")
         .then(r => r.json())
         .then((data: Pipeline[]) => {
           setPipelines(prev => {

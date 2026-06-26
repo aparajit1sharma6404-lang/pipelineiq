@@ -17,7 +17,7 @@ export default function Alerts({ dark }: AlertsProps) {
 
   useEffect(() => {
     const run = () =>
-      fetch("http://localhost:5000/api/pipelines")
+      fetch("https://pipelineiq-backendd.onrender.com/api/pipelines")
         .then(r => r.json())
         .then(setPipelines);
     run();

@@ -23,7 +23,7 @@ export default function PipelineTable() {
   const [temp, setTemp] = useState(70);
 
   const fetchPipelines = () => {
-    fetch("http://localhost:5000/api/pipelines")
+    fetch("https://pipelineiq-backendd.onrender.com/api/pipelines")
       .then(r => r.json())
       .then(setPipelines);
   };
@@ -31,7 +31,7 @@ export default function PipelineTable() {
   useEffect(() => {
     fetchPipelines();
     const interval = setInterval(() => {
-      fetch("http://localhost:5000/api/simulate", { method: "POST" })
+      fetch("https://pipelineiq-backendd.onrender.com/api/simulate", { method: "POST" })
         .then(() => fetchPipelines());
     }, 4000);
     return () => clearInterval(interval);
@@ -39,7 +39,7 @@ export default function PipelineTable() {
 
   const addPipeline = async () => {
     if (!name) return;
-    await fetch("http://localhost:5000/api/pipelines", {
+    await fetch("https://pipelineiq-backendd.onrender.com/api/pipelines", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, status, pressure, flow, temp, lastChecked: "just now" }),
@@ -49,7 +49,7 @@ export default function PipelineTable() {
   };
 
   const deletePipeline = async (id: string) => {
-    await fetch(`http://localhost:5000/api/pipelines/${id}`, { method: "DELETE" });
+    await fetch(`https://pipelineiq-backendd.onrender.com/api/pipelines/${id}`, { method: "DELETE" });
     fetchPipelines();
   };
 
