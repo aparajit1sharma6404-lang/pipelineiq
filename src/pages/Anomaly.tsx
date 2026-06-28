@@ -15,12 +15,13 @@ type AnomalyProps = { dark: boolean };
 export default function Anomaly({ dark }: AnomalyProps) {
   const [pipelines, setPipelines] = useState<AnomalyPipeline[]>([]);
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<string>("");
 
   useEffect(() => {
     const fetch_ = () =>
       fetch("https://pipelineiq-ml.onrender.com/api/anomalies")
         .then(r => r.json())
-        .then(d => { if(Array.isArray(d) && d.length > 0) { setPipelines(d); setLoading(false); } })
+        .then(d => { if(Array.isArray(d) && d.length > 0) { setPipelines(d); setLoading(false); setLastUpdated(new Date().toLocaleTimeString()); } })
         .catch(() => {});
     fetch_();
     const interval = setInterval(fetch_, 6000);
@@ -66,7 +67,7 @@ export default function Anomaly({ dark }: AnomalyProps) {
             Isolation Forest Anomaly Detection
           </h3>
           <p style={{ color: "#6b7280", fontSize: "12px", margin: "0 0 20px" }}>
-            Unsupervised ML model detecting unusual sensor patterns — updated every 6 seconds
+            Unsupervised ML model detecting unusual sensor patterns {lastUpdated && `— last updated ${lastUpdated}`}
           </p>
 
           {pipelines.map((p, i) => (
