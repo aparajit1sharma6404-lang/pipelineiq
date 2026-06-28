@@ -7,6 +7,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Chatbot from "./pages/Chatbot";
 import Risk from "./pages/Risk";
+import Anomaly from "./pages/Anomaly";
 import type { Thresholds } from "./pages/Settings";
 
 function NotificationBell({ dark }: { dark: boolean }) {
@@ -102,6 +103,7 @@ export default function App() {
     alerts: ["Alerts", "Active warnings and critical events"],
     chatbot: ["AI Assistant", "Ask questions about your pipelines"],
     risk: ["Risk Intelligence", "AI-powered predictive risk scoring"],
+    anomaly: ["Anomaly Detection", "Isolation Forest ML model"],
     settings: ["Settings", "Account and system preferences"],
   };
 
@@ -112,6 +114,7 @@ export default function App() {
       case "alerts": return <Alerts dark={dark} />;
       case "chatbot": return <Chatbot dark={dark} />;
       case "risk": return <Risk dark={dark} />;
+      case "anomaly": return <Anomaly dark={dark} />;
       case "settings": return <Settings dark={dark} thresholds={thresholds} setThresholds={setThresholds} />;
       default: return <Dashboard dark={dark} />;
     }
