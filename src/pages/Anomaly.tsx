@@ -20,7 +20,8 @@ export default function Anomaly({ dark }: AnomalyProps) {
     const fetch_ = () =>
       fetch("https://pipelineiq-ml.onrender.com/api/anomalies")
         .then(r => r.json())
-        .then(d => { setPipelines(d); setLoading(false); });
+        .then(d => { if(Array.isArray(d) && d.length > 0) { setPipelines(d); setLoading(false); } })
+        .catch(() => {});
     fetch_();
     const interval = setInterval(fetch_, 6000);
     return () => clearInterval(interval);
@@ -58,7 +59,7 @@ export default function Anomaly({ dark }: AnomalyProps) {
       </div>
 
       {loading ? (
-        <p style={{ color: "#6b7280" }}>Running Isolation Forest model...</p>
+        <p style={{ color: "#6b7280" }}>Running Isolation Forest model... (first load may take 30-50s)</p>
       ) : (
         <div style={card(dark ? "#2a2f42" : "#e5e7eb")}>
           <h3 style={{ color: dark ? "#fff" : "#111", margin: "0 0 4px" }}>
