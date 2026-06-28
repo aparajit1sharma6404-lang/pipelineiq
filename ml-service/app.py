@@ -19,8 +19,9 @@ def detect_anomalies():
     if len(pipelines) < 3:
         return jsonify([])
 
-    names = [p["name"] for p in pipelines if not p["name"].startswith("Auto")]
-    data = [[p["pressure"], p["flow"], p["temp"]] for p in pipelines if not p["name"].startswith("Auto")]
+    filtered = [p for p in pipelines if not p["name"].startswith("Auto")]
+    names = [p["name"] for p in filtered]
+    data = [[p["pressure"], p["flow"], p["temp"]] for p in filtered]
 
     if len(data) < 3:
         return jsonify([])
@@ -31,7 +32,7 @@ def detect_anomalies():
     scores = model.score_samples(X)
 
     results = []
-    for i, p in enumerate([p for p in pipelines if not p["name"].startswith("Auto")]):
+    for i, p in enumerate(filtered):
         anomaly_score = round((1 - (scores[i] - scores.min()) / (scores.max() - scores.min() + 1e-9)) * 100, 1)
         results.append({
             "name": names[i],
@@ -51,4 +52,5 @@ def health():
     return "ML Service Running"
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    port = int(os.environ.get("PORT", 5001))
+    app.run(host="0.0.0.0", port=port)
