@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
@@ -8,6 +8,78 @@ import Login from "./pages/Login";
 import Chatbot from "./pages/Chatbot";
 import Risk from "./pages/Risk";
 import type { Thresholds } from "./pages/Settings";
+
+function NotificationBell({ dark }: { dark: boolean }) {
+  const [open, setOpen] = React.useState(false);
+  const [alerts, setAlerts] = React.useState<{name: string; status: string; pressure: number; temp: number}[]>([]);
+
+  React.useEffect(() => {
+    const fetch_ = () =>
+      fetch("https://pipelineiq-backendd.onrender.com/api/pipelines")
+        .then(r => r.json())
+        .then((data: any[]) =>
+          setAlerts(data.filter((p: any) => p.status !== "Healthy" && !p.name.startsWith("Auto")))
+        );
+    fetch_();
+    const interval = setInterval(fetch_, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{ position: "relative" }}>
+      <button
+        onClick={() => setOpen(o => !o)}
+        style={{
+          position: "relative", background: dark ? "#1a1f2e" : "#e5e7eb",
+          border: "none", borderRadius: "8px", padding: "8px 12px",
+          cursor: "pointer", fontSize: "16px",
+        }}
+      >
+        🔔
+        {alerts.length > 0 && (
+          <span style={{
+            position: "absolute", top: "-6px", right: "-6px",
+            background: "#ef4444", color: "#fff",
+            borderRadius: "999px", fontSize: "10px", fontWeight: 700,
+            width: "18px", height: "18px", display: "grid", placeItems: "center",
+          }}>{alerts.length}</span>
+        )}
+      </button>
+
+      {open && (
+        <div style={{
+          position: "absolute", top: "44px", right: 0,
+          width: "320px", background: dark ? "#1a1f2e" : "#fff",
+          border: "1px solid #2a2f42", borderRadius: "12px",
+          boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+          zIndex: 100, overflow: "hidden",
+        }}>
+          <div style={{ padding: "14px 16px", borderBottom: "1px solid #2a2f42", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ color: dark ? "#fff" : "#111", fontWeight: 700, fontSize: "14px" }}>Live Alerts</span>
+            <span style={{ background: "#ef444422", color: "#ef4444", fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: "999px" }}>{alerts.length} active</span>
+          </div>
+          {alerts.length === 0 ? (
+            <p style={{ color: "#22c55e", fontSize: "13px", padding: "16px", margin: 0 }}>All pipelines healthy</p>
+          ) : (
+            alerts.map((a, i) => (
+              <div key={i} style={{
+                padding: "12px 16px",
+                borderBottom: "1px solid #2a2f4222",
+                borderLeft: `4px solid ${a.status === "Critical" ? "#ef4444" : "#f59e0b"}`,
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                  <span style={{ color: dark ? "#e2e8f0" : "#111", fontSize: "13px", fontWeight: 600 }}>{a.name}</span>
+                  <span style={{ color: a.status === "Critical" ? "#ef4444" : "#f59e0b", fontSize: "11px", fontWeight: 700 }}>{a.status}</span>
+                </div>
+                <span style={{ color: "#6b7280", fontSize: "11px" }}>Pressure: {a.pressure} bar · Temp: {a.temp}°C</span>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function App() {
   const [page, setPage] = useState("dashboard");
@@ -101,7 +173,7 @@ export default function App() {
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <span style={{ color: dark ? "#fff" : "#111", background: dark ? "#1a1f2e" : "#e5e7eb", padding: "8px 12px", borderRadius: "8px" }}>🔔</span>
+            <NotificationBell dark={dark} />
             <span style={{ color: dark ? "#fff" : "#111", fontWeight: 600, fontSize: "14px" }}>Admin</span>
             <button onClick={logout} style={{
               background: "#ef444422", color: "#ef4444",
