@@ -18,7 +18,7 @@ export default function Anomaly({ dark }: AnomalyProps) {
 
   useEffect(() => {
     const fetch_ = () =>
-      fetch("http://127.0.0.1:5001/api/anomalies")
+      fetch("https://pipelineiq-ml.onrender.com/api/anomalies")
         .then(r => r.json())
         .then(d => { setPipelines(d); setLoading(false); });
     fetch_();
