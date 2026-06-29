@@ -14,6 +14,7 @@ type AnalyticsProps = { dark: boolean };
 
 export default function Analytics({ dark }: AnalyticsProps) {
   const [pipelines, setPipelines] = useState<Pipeline[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeMetric, setActiveMetric] = useState<"flow" | "pressure" | "temp">("flow");
 
   useEffect(() => {
@@ -21,7 +22,7 @@ export default function Analytics({ dark }: AnalyticsProps) {
       fetch("https://pipelineiq-backendd.onrender.com/api/simulate", { method: "POST" })
         .then(() => fetch("https://pipelineiq-backendd.onrender.com/api/pipelines"))
         .then(r => r.json())
-        .then(setPipelines);
+        .then(data => { setPipelines(data); setLoading(false); });
     };
     run();
     const interval = setInterval(run, 4000);
@@ -46,6 +47,26 @@ export default function Analytics({ dark }: AnalyticsProps) {
   };
   const { label, color } = metricConfig[activeMetric];
   const maxVal = pipelines.length ? Math.max(...pipelines.map(p => p[activeMetric])) : 1;
+
+  if (loading) return (
+    <div style={{
+      display: "flex", flexDirection: "column", alignItems: "center",
+      justifyContent: "center", height: "60vh", gap: "20px",
+    }}>
+      <div style={{
+        width: "48px", height: "48px", border: "4px solid #2a2f42",
+        borderTop: "4px solid #3b82f6", borderRadius: "50%",
+        animation: "spin 1s linear infinite",
+      }} />
+      <p style={{ color: "#3b82f6", fontSize: "16px", fontWeight: 600, margin: 0 }}>
+        Connecting to live servers...
+      </p>
+      <p style={{ color: "#6b7280", fontSize: "13px", margin: 0 }}>
+        Fetching pipeline analytics data
+      </p>
+      <style>{"@keyframes spin { to { transform: rotate(360deg); } }"}</style>
+    </div>
+  );
 
   return (
     <div>
